@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+project_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+# Enter the pinned environment even when the editor was opened from the desktop.
+# shellHook prints to stderr so stdout stays reserved for the LSP protocol.
+exec nix develop "$project_root" --command clangd \
+  --experimental-modules-support '--query-driver=/nix/store/*/bin/clang*' "$@"

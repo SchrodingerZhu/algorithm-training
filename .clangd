@@ -1,0 +1,4 @@
+CompileFlags:
+  CompilationDatabase: build
+  # clangd 22 can discard the database's language standard for .cppm files.
+  Add: [-std=c++26]

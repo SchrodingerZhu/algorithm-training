@@ -1,0 +1,13 @@
+{
+  "version": 6,
+  "configurePresets": [{
+    "name": "default",
+    "displayName": "算法练习 · Nix C++26",
+    "generator": "Ninja",
+    "binaryDir": "${sourceDir}/build",
+    "toolchainFile": "${sourceDir}/cmake/nix-toolchain.cmake",
+    "cacheVariables": {"CMAKE_BUILD_TYPE": "Debug", "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"}
+  }],
+  "buildPresets": [{"name": "default", "configurePreset": "default", "jobs": 2}],
+  "testPresets": [{"name": "default", "configurePreset": "default", "output": {"outputOnFailure": true}}]
+}
