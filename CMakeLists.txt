@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_MODULE_STD ON)
 set(CMAKE_CXX_FLAGS_INIT "-pthread")
-project(SieveLab LANGUAGES CXX)
+project(AlgorithmTraining LANGUAGES CXX)
 
 if(NOT 26 IN_LIST CMAKE_CXX_COMPILER_IMPORT_STD)
   message(FATAL_ERROR "C++26 import std is unavailable. Please use nix develop.")

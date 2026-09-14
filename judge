@@ -15,7 +15,7 @@ if ! command -v cmake >/dev/null || ! command -v clang++ >/dev/null; then
   echo '请先在此目录运行 nix develop，再运行 ./judge。' >&2
   exit 2
 fi
-build_dir="${SIEVE_BUILD_DIR:-$PWD/build}"
+build_dir="${TRAINING_BUILD_DIR:-$PWD/build}"
 cmake -S . -B "$build_dir" -G Ninja -DCMAKE_BUILD_TYPE=Debug \
   -DCMAKE_TOOLCHAIN_FILE="$PWD/cmake/nix-toolchain.cmake" \
   -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
