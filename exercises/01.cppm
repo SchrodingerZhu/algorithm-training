@@ -6,8 +6,12 @@ public:
   std::vector<long long>
   rangeMin(const std::vector<long long> &values,
            const std::vector<std::array<int, 2>> &queries) {
-    (void)values;
-    (void)queries;
-    throw std::logic_error("TODO 01: 先读 lessons/01.md");
+    auto whole = std::span(values);
+    return queries
+      | std::views::transform([&](auto range) {
+        auto span = whole.subspan(range[0], range[1] - range[0] + 1);
+        return std::ranges::min(span);
+      })
+      | std::ranges::to<std::vector>();
   }
 };

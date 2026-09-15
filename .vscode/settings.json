@@ -13,5 +13,6 @@
     "cmake.cmakePath": "cmake",
     "C_Cpp.intelliSenseEngine": "disabled",
     "files.associations": {"*.cppm": "cpp"},
-    "[cpp]": {"editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"}
+    "[cpp]": {"editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"},
+    "editor.formatOnSave": true
 }
