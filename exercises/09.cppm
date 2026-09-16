@@ -29,24 +29,43 @@ export class Solution {
   };
 
   struct DFSState {
-    std::vector<bool> visited;
     std::vector<std::size_t> euler_tour;
     std::vector<std::size_t> first;
     std::vector<std::size_t> depth;
   };
 
+  struct Frame {
+    std::size_t current;
+    std::size_t depth;
+    bool fresh;
+    std::vector<int>::const_iterator iterator;
+  };
+  static void dfs(const std::vector<std::vector<int>> &children,
+                  std::stack<Frame> &frames, DFSState &state) {
+    while (!frames.empty()) {
+      std::size_t current = frames.top().current;
+      std::size_t depth = frames.top().depth;
+      if (frames.top().fresh) {
+        state.depth[current] = depth;
+        state.first[current] = state.euler_tour.size();
+        frames.top().fresh = false;
+      }
+      state.euler_tour.push_back(current);
+      if (frames.top().iterator != children[current].end()) {
+        std::size_t child = *frames.top().iterator;
+        frames.top().iterator++;
+        frames.emplace(child, depth + 1, true, children[child].begin());
+      } else {
+        frames.pop();
+      }
+    }
+  }
+
   static void dfs(const std::vector<std::vector<int>> &children,
                   std::size_t current, std::size_t depth, DFSState &state) {
-    if (!state.visited[current]) {
-      state.visited[current] = true;
-      state.depth[current] = depth;
-      state.first[current] = state.euler_tour.size();
-    }
-    state.euler_tour.push_back(current);
-    for (int child : children[current]) {
-      dfs(children, child, depth + 1, state);
-      state.euler_tour.push_back(current);
-    }
+    std::stack<Frame> frames;
+    frames.emplace(current, depth, true, children[current].begin());
+    dfs(children, frames, state);
   }
 
 public:
@@ -56,7 +75,6 @@ public:
     for (std::size_t i = 1; i < parent.size(); ++i)
       children[parent[i]].push_back(i);
     DFSState state{
-        std::vector(parent.size(), false),
         {},
         std::vector(parent.size(), 0uz),
         std::vector(parent.size(), 0uz),
