@@ -1,6 +1,6 @@
 # 第二组：RMQ → 倍增与 LCA → 树链剖分 → LCT
 
-这是独立于筛法的树与区间查询题组，共 18 题。当前分支 `rmq-lca-lct`；筛法与原代码在 `sieves` 分支。先做 01，再逐题推进。已经熟练的基础题可通过测试与解释不变量快速跳过。
+这是独立于筛法的树与区间查询题组，共 18 道主线题，另有 10-a、10-b 两道扩展题。当前分支 `rmq-lca-lct`；筛法与原代码在 `sieves` 分支。先做 01，再逐题推进。已经熟练的基础题可通过测试与解释不变量快速跳过。
 
 ## 打开项目
 
@@ -14,7 +14,7 @@ nix develop
 第一题代码：`/home/schrodingerzy/Documents/algorithm-training/exercises/01.cppm`。
 第一题讲义：`/home/schrodingerzy/Documents/algorithm-training/lessons/01.md`。
 
-每题只修改对应 `.cppm` 的 Solution；接口完整给出，不需要 main 或输入输出。`./judge 02` 等选择题号；`./judge all` 运行本分支全部题目。待实现题显示 TODO 失败是正常现象。题目均为本题组自编，不冒用平台题号。
+每题只修改对应 `.cppm` 的 Solution；接口完整给出，不需要 main 或输入输出。`./judge 02` 等选择题号，扩展题用 `./judge 10-a` 或 `./judge 10-b`；`./judge all` 运行本分支全部题目（包括扩展题）。待实现题显示 TODO 失败是正常现象。题目均为本题组自编，不冒用平台题号。
 
 ## 递进路线
 
@@ -30,6 +30,8 @@ nix develop
 | 08 | 二进制提升求 LCA | 树 | [题面与提示](lessons/08.md) | [练习](exercises/08.cppm) |
 | 09 | Euler Tour 把 LCA 变为 RMQ | 树 | [题面与提示](lessons/09.md) | [练习](exercises/09.cppm) |
 | 10 | Cartesian Tree：把 RMQ 变为 LCA | 树 | [题面与提示](lessons/10.md) | [练习](exercises/10.cppm) |
+| 10-a | Cartesian Tree：直方图中的最大矩形 | 树与子树统计 | [题面与提示](lessons/10-a.md) | [练习](exercises/10-a.cppm) |
+| 10-b | Cartesian Tree：所有子数组的最小值之和 | 树与贡献计数 | [题面与提示](lessons/10-b.md) | [练习](exercises/10-b.cppm) |
 | 11 | 树上 RMQ：倍增聚合路径边最小值 | 树 | [题面与提示](lessons/11.md) | [练习](exercises/11.cppm) |
 | 12 | 换根 LCA：不重建整棵树 | 树 | [题面与提示](lessons/12.md) | [练习](exercises/12.cppm) |
 | 13 | 子树 RMQ：DFS 序与点修改 | 树 | [题面与提示](lessons/13.md) | [练习](exercises/13.cppm) |
@@ -44,6 +46,7 @@ nix develop
 - **数组、不需要 LCA**：01 扫描、02 ST 倍增、03 单调队列、04～05 线段树、06 离线并查集。既有通用 RMQ，也有利用窗口或离线条件的专用方法。
 - **树与倍增**：07 存祖先函数复合；08 求 LCA；11 在祖先表上同时维护路径最小值。
 - **RMQ 与 LCA 互相归约**：09 把 LCA 变成 Euler Tour 上的 RMQ；10 用 Cartesian Tree 把 RMQ 变成 LCA。二者不能与只记录一次的 DFS 序混淆。
+- **直接使用笛卡尔树的子树**：10-a 用子树大小计算矩形面积；10-b 统计各节点对所有子数组最小值之和的贡献。两题均为 `O(n)`，无需 LCA 查询表。
 - **固定树上的变化**：12 换根查询，13 子树修改查询，14～15 路径修改查询。13 无需 LCA；HLD 的跨链过程可直接处理路径，无需另外调用 LCA。
 - **拓扑也会变化**：16 先练 Splay 旋转、排名和翻转标记；17 连边、断边与连通性；18 用 LCT 维护动态路径和。
 

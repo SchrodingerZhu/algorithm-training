@@ -37,4 +37,18 @@ TEST(Stage10, ScaleAndShape) {
     expected.push_back(l);
   }
   EXPECT_EQ(solution.argMin(a, queries), expected);
+
+  std::reverse(a.begin(), a.end());
+  for (std::size_t i = 0; i < queries.size(); ++i) {
+    int l = queries[i][0];
+    int r = l + (n - 1 - l) / 2;
+    queries[i][1] = r;
+    expected[i] = r;
+  }
+  EXPECT_EQ(solution.argMin(a, queries), expected);
+
+  std::fill(a.begin(), a.end(), -5);
+  for (std::size_t i = 0; i < queries.size(); ++i)
+    expected[i] = queries[i][0];
+  EXPECT_EQ(solution.argMin(a, queries), expected);
 }

@@ -20,7 +20,9 @@ target_link_libraries(environment_smoke PRIVATE GTest::gtest_main)
 add_test(NAME Environment COMMAND environment_smoke)
 
 set(SOLUTIONS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/exercises" CACHE PATH "Directory containing solutions")
-file(GLOB exercise_sources CONFIGURE_DEPENDS "${SOLUTIONS_DIR}/[0-9][0-9].cppm")
+file(GLOB exercise_sources CONFIGURE_DEPENDS
+  "${SOLUTIONS_DIR}/[0-9][0-9].cppm"
+  "${SOLUTIONS_DIR}/[0-9][0-9]-[a-z].cppm")
 foreach(source IN LISTS exercise_sources)
   get_filename_component(stage "${source}" NAME_WE)
   add_library(solution_${stage} STATIC)

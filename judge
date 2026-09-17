@@ -4,11 +4,11 @@ cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
 stage="${1:-01}"
 case "$stage" in
   smoke) target=environment_smoke; pattern='^Environment$' ;;
-  [0-9][0-9])
+  [0-9][0-9]|[0-9][0-9]-[a-z])
     if [[ ! -f "exercises/$stage.cppm" ]]; then echo "当前分支没有第 $stage 题。" >&2; exit 2; fi
     target="stage_$stage"; pattern="^Stage$stage$" ;;
-  all) target=all; pattern='^(Environment|Stage[0-9]+)$' ;;
-  *) echo '用法：./judge [smoke|两位题号|all]' >&2; exit 2 ;;
+  all) target=all; pattern='^(Environment|Stage[0-9]+(-[a-z])?)$' ;;
+  *) echo '用法：./judge [smoke|两位题号|扩展题号（如 10-a）|all]' >&2; exit 2 ;;
 
 esac
 if ! command -v cmake >/dev/null || ! command -v clang++ >/dev/null; then
