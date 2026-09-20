@@ -82,25 +82,18 @@ export class Solution {
     std::optional<std::size_t> out = std::nullopt;
   };
 
-  void dfs(std::vector<NodeState> &state, std::vector<std::size_t> &dfs_order,
-           const std::vector<std::vector<std::size_t>> &out_edges,
-           std::size_t node) {
-    std::stack<std::pair<std::size_t, std::size_t>> pending;
-    pending.emplace(node, 0);
-    while (!pending.empty()) {
-      auto &[current, next_child] = pending.top();
-      if (!state[current].in) {
-        state[current].in = dfs_order.size();
-        dfs_order.push_back(current);
-      }
-      if (next_child < out_edges[current].size()) {
-        std::size_t child = out_edges[current][next_child++];
-        pending.emplace(child, 0);
-      } else {
-        state[current].out = dfs_order.size();
-        pending.pop();
-      }
+  std::generator<std::size_t>
+  dfs(std::vector<NodeState> &state,
+      const std::vector<std::vector<std::size_t>> &out_edges, std::size_t node,
+      std::size_t &counter) {
+    if (!state[node].in) {
+      state[node].in = counter;
+      counter += 1;
+      co_yield node;
     }
+    for (std::size_t child : out_edges[node])
+      co_yield std::ranges::elements_of(dfs(state, out_edges, child, counter));
+    state[node].out = counter;
   }
 
 public:
@@ -112,8 +105,9 @@ public:
     for (std::size_t i = 1; i < parent.size(); ++i)
       out_edges[parent[i]].push_back(i);
     std::vector<NodeState> state(parent.size());
-    std::vector<std::size_t> dfs_order;
-    dfs(state, dfs_order, out_edges, 0);
+    std::size_t counter = 0;
+    auto dfs_order =
+        dfs(state, out_edges, 0, counter) | std::ranges::to<std::vector>();
     std::vector<long long> ordered_values =
         dfs_order |
         std::views::transform([&](std::size_t i) { return values[i]; }) |

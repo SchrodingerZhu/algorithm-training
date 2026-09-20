@@ -18,6 +18,10 @@ foreach(_dir IN LISTS _dirs)
   if(IS_DIRECTORY "${_dir}")
     string(APPEND CMAKE_CXX_FLAGS_INIT " -isystem \"${_dir}\"")
   endif()
+  # libstdc++'s std module also exports deprecated headers.
+  if(EXISTS "${_dir}/backward/strstream")
+    string(APPEND CMAKE_CXX_FLAGS_INIT " -isystem \"${_dir}/backward\"")
+  endif()
 endforeach()
 
 # glibc fortify overloads have internal linkage and cannot be exported by std.
@@ -27,9 +31,9 @@ set(CMAKE_CXX_COMPILER_LAUNCHER
 
 if(NOT CMAKE_CXX_STDLIB_MODULES_JSON)
   set(CMAKE_CXX_STDLIB_MODULES_JSON "$ENV{NIX_CXX_STDLIB_MODULES_JSON}"
-    CACHE FILEPATH "libc++ module manifest")
+    CACHE FILEPATH "libstdc++ module manifest")
 endif()
 if(NOT EXISTS "${CMAKE_CXX_STDLIB_MODULES_JSON}")
-  message(FATAL_ERROR "Missing libc++ module manifest. Configure inside nix develop.")
+  message(FATAL_ERROR "Missing libstdc++ module manifest. Configure inside nix develop.")
 endif()
 list(APPEND CMAKE_TRY_COMPILE_PLATFORM_VARIABLES CMAKE_CXX_STDLIB_MODULES_JSON)

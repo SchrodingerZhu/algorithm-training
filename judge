@@ -16,8 +16,19 @@ if ! command -v cmake >/dev/null || ! command -v clang++ >/dev/null; then
   exit 2
 fi
 build_dir="${TRAINING_BUILD_DIR:-$PWD/build}"
-cmake -S . -B "$build_dir" -G Ninja -DCMAKE_BUILD_TYPE=Debug \
-  -DCMAKE_TOOLCHAIN_FILE="$PWD/cmake/nix-toolchain.cmake" \
-  -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+compiler="$(command -v clang++)"
+toolchain="$PWD/cmake/nix-toolchain.cmake"
+configure_args=()
+if [[ -f "$build_dir/CMakeCache.txt" ]]; then
+  cached_compiler="$(sed -n 's/^CMAKE_CXX_COMPILER:[^=]*=//p' "$build_dir/CMakeCache.txt")"
+  cached_toolchain="$(sed -n 's/^CMAKE_TOOLCHAIN_FILE:[^=]*=//p' "$build_dir/CMakeCache.txt")"
+  # Reset before configuring: CMake's compiler-change reset drops toolchain settings.
+  if [[ "$cached_compiler" != "$compiler" || "$cached_toolchain" != "$toolchain" ]]; then
+    configure_args+=(--fresh)
+  fi
+fi
+cmake "${configure_args[@]}" -S . -B "$build_dir" -G Ninja -DCMAKE_BUILD_TYPE=Debug \
+  -DCMAKE_TOOLCHAIN_FILE="$toolchain" \
+  -DCMAKE_CXX_COMPILER="$compiler" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 cmake --build "$build_dir" --target "$target" --parallel "${CMAKE_BUILD_PARALLEL_LEVEL:-2}"
 ctest --test-dir "$build_dir" --output-on-failure --no-tests=error -R "$pattern"

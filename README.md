@@ -60,7 +60,7 @@ nix develop
 
 ## 环境与分支
 
-环境沿用已验证的 Nix、Clang/libc++ 22.1.8、C++26、import std、GoogleTest 和 clangd。保留 fish 的 `unset shellHook` 修复。当前 flake 支持 x86_64-linux。
+环境使用 Nix、`llvmPackages_23`（当前锁定 Clang 23.1.0-rc1、libstdc++ 15.3.0）、C++26、import std、GoogleTest 和 clangd。保留 fish 的 `unset shellHook` 修复。当前 flake 支持 x86_64-linux。
 
 保存或提交修改后，可以 `git switch sieves` 回到第一组，或 `git switch rmq-lca-lct` 回来。切换后先 `nix develop`，再 `cmake --fresh --preset default`；两分支复用 build 目录时需更新编译信息。不要在未保存修改时强制切换或清理文件。
 
