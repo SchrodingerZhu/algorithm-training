@@ -15,8 +15,14 @@ endif()
 
 find_package(GTest CONFIG REQUIRED)
 include(CTest)
-add_executable(environment_smoke tests/environment.cpp)
-target_link_libraries(environment_smoke PRIVATE GTest::gtest_main)
+add_library(training_common STATIC)
+target_sources(training_common PUBLIC FILE_SET CXX_MODULES
+  BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/common"
+  FILES common/task.cppm)
+target_compile_options(training_common PRIVATE -Wall -Wextra -Wpedantic)
+
+add_executable(environment_smoke tests/environment.cpp tests/task_test.cpp)
+target_link_libraries(environment_smoke PRIVATE training_common GTest::gtest_main)
 add_test(NAME Environment COMMAND environment_smoke)
 
 set(SOLUTIONS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/exercises" CACHE PATH "Directory containing solutions")
@@ -28,6 +34,7 @@ foreach(source IN LISTS exercise_sources)
   add_library(solution_${stage} STATIC)
   target_sources(solution_${stage} PUBLIC FILE_SET CXX_MODULES BASE_DIRS "${SOLUTIONS_DIR}" FILES "${source}")
   target_compile_options(solution_${stage} PRIVATE -Wall -Wextra -Wpedantic)
+  target_link_libraries(solution_${stage} PUBLIC training_common)
   add_executable(stage_${stage} "tests/${stage}_test.cpp")
   target_compile_options(stage_${stage} PRIVATE -Wall -Wextra -Wpedantic)
   target_link_libraries(stage_${stage} PRIVATE solution_${stage} GTest::gtest_main)

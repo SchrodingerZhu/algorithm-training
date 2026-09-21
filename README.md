@@ -16,6 +16,8 @@ nix develop
 
 每题只修改对应 `.cppm` 的 Solution；接口完整给出，不需要 main 或输入输出。`./judge 02` 等选择题号，扩展题用 `./judge 10-a` 或 `./judge 10-b`；`./judge all` 运行本分支全部题目（包括扩展题）。待实现题显示 TODO 失败是正常现象。题目均为本题组自编，不冒用平台题号。
 
+公共同步协程类型位于 [common/task.cppm](common/task.cppm)。练习可用 `import common.task;` 导入 `task<T>`，通过 `co_await` 等待子任务并用 `co_return` 返回结果；根任务用 `dfs(...).run()` 执行。任务只能执行一次，`T` 应为可移动的非 `void` 对象类型，且只能等待其他 `task<U>`。`./judge smoke` 包含该模块的深链、返回值和异常清理测试。
+
 ## 递进路线
 
 | 题号 | 内容 | 类型 | 讲义 | 代码 |
