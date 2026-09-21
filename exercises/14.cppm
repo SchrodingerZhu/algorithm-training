@@ -164,9 +164,10 @@ public:
         result = std::min(result, trees[info.chain].query(0, info.index + 1));
         x = parent[heads[info.chain]];
       }
-      auto [first, last] = std::minmax(assignment[x].index, assignment[y].index);
-      result = std::min(result,
-                        trees[assignment[x].chain].query(first, last - first + 1));
+      auto [first, last] =
+          std::minmax(assignment[x].index, assignment[y].index);
+      result = std::min(
+          result, trees[assignment[x].chain].query(first, last - first + 1));
       results.push_back(result);
     }
     return results;
