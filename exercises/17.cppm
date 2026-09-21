@@ -74,11 +74,11 @@ export class Solution {
       rotate(node_dir == parent_dir ? parent : node);
       rotate(node);
     }
-    push_down(node);
   }
   static void expose(Node *node) {
     while (true) {
       splay(node);
+      push_down(node);
       // make node the deepest one in its own tree
       if (node->children[1]) {
         node->children[1]->parent = nullptr;
@@ -89,6 +89,7 @@ export class Solution {
         return;
       Node *path_parent = node->path_parent;
       splay(path_parent);
+      push_down(path_parent);
       if (path_parent->children[1]) {
         path_parent->children[1]->parent = nullptr;
         path_parent->children[1]->path_parent = path_parent;
